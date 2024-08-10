@@ -15,7 +15,7 @@ function logger(req, res, next) {
       req.originalUrl
     } Timestamp: ${timestamp.toISOString()}`
   );
-  res.status(200).json({ message: 'This is working.' });
+  next()
 }
 
 function validateUserId(req, res, next) {
