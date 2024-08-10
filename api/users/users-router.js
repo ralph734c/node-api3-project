@@ -17,20 +17,18 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   // RETURN AN ARRAY WITH ALL THE USERS
 
-  await usersModel
-    .get()
-    .then((users) => {
-      if (users && users.length > 0) {
-        res.status(200).json(users);
-      } else {
-        res.status(404).send('No users found');
-      }
-    })
-    .catch((error) => {
-      res
-        .status(500)
-        .json({ message: 'Error retrieving users', error: error.message });
-    });
+  try {
+    const users = await usersModel.get();
+    if (users && users.length > 0) {
+      res.status(200).json(users);
+    } else {
+      res.status(404).send('No users found');
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: 'Error retrieving users', error: error.message });
+  }
 });
 
 router.get('/:id', (req, res) => {
