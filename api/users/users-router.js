@@ -16,6 +16,12 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   // RETURN AN ARRAY WITH ALL THE USERS
+  const users = usersModel.get();
+  if (users) {
+    res.status(200).send(users)
+  } else {
+    res.status(404).send('No users found')
+  }
 });
 
 router.get('/:id', (req, res) => {
@@ -51,3 +57,5 @@ router.post('/:id/posts', (req, res) => {
 });
 
 // do not forget to export the router
+
+module.exports = router;
