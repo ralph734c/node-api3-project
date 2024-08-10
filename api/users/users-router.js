@@ -1,3 +1,12 @@
+const usersModel = require('./users-model');
+const postsModel = require('../posts/posts-model');
+const {
+  logger,
+  validateUserId,
+  validateUser,
+  validatePost,
+} = require('../middleware/middleware');
+
 const express = require('express');
 
 // You will need `users-model.js` and `posts-model.js` both
