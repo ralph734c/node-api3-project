@@ -61,10 +61,24 @@ router.post('/', validateUser, async (req, res) => {
   }
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateUserId, validateUser, async (req, res) => {
   // RETURN THE FRESHLY UPDATED USER OBJECT
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
+  const userIdToUpdate = req.params.id;
+  const updatedUserBody = req.body;
+  try {
+    const updatedUser = await usersModel.update(
+      userIdToUpdate,
+      updatedUserBody
+    );
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
 });
 
 router.delete('/:id', (req, res) => {
