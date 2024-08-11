@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ message: 'Error retrieving users', error: error.message });
+      .json({ message: 'Internal server error', error: error.message });
   }
 });
 
@@ -35,22 +35,30 @@ router.get('/:id', validateUserId, async (req, res) => {
   // RETURN THE USER OBJECT
   // this needs a middleware to verify user id
   try {
-    const userId = req.params.id
-    const user = await usersModel.getById(userId)
-    res.status(200).json(user)
+    const userId = req.params.id;
+    const user = await usersModel.getById(userId);
+    res.status(200).json(user);
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: 'Error retrieving the specified user',
-        error: error.message,
-      });
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
   }
 });
 
-router.post('/', (req, res) => {
+router.post('/', validateUser, async (req, res) => {
   // RETURN THE NEWLY CREATED USER OBJECT
   // this needs a middleware to check that the request body is valid
+  const newUser = req.body;
+  try {
+    const createdUser = await usersModel.insert(newUser);
+    res.status(201).json(createdUser);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
 });
 
 router.put('/:id', (req, res) => {
