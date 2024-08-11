@@ -15,18 +15,24 @@ function logger(req, res, next) {
       req.originalUrl
     } Timestamp: ${timestamp.toISOString()}`
   );
-  next()
+  next();
 }
 
-function validateUserId(req, res, next) {
+async function validateUserId(req, res, next) {
   // DO YOUR MAGIC
-  const userId = getById(req.params.id);
-  if (userId) {
-    const user = req.user;
-    res.status(200).json(user);
-    next();
-  } else {
-    res.status(404).json({ message: 'user not found' });
+  try {
+    const userId = await getById(req.params.id);
+    if (userId) {
+      req.user = userId;
+      next();
+    } else {
+      res
+        .status(404)
+        .json({ message: `A user with the ID ${req.params.id} was not found` });
+    }
+  } catch (error) {
+    console.error('Database query failed:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
 

@@ -31,9 +31,21 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', validateUserId, async (req, res) => {
   // RETURN THE USER OBJECT
   // this needs a middleware to verify user id
+  try {
+    const userId = req.params.id
+    const user = await usersModel.getById(userId)
+    res.status(200).json(user)
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        message: 'Error retrieving the specified user',
+        error: error.message,
+      });
+  }
 });
 
 router.post('/', (req, res) => {
