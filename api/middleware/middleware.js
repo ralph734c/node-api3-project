@@ -9,11 +9,9 @@ const {
 
 function logger(req, res, next) {
   // DO YOUR MAGIC
-  const timestamp = new Date();
+  const timestamp = new Date().toLocaleString();
   console.log(
-    `Method: ${req.method} URL: ${
-      req.originalUrl
-    } Timestamp: ${timestamp.toISOString()}`
+    `Method: ${req.method} URL: ${req.originalUrl} Timestamp: ${[timestamp]}`
   );
   next();
 }
@@ -40,6 +38,7 @@ function validateUser(req, res, next) {
   // DO YOUR MAGIC
   const userName = req.body.name;
   if (userName) {
+    req.name = userName.trim()
     next();
   } else {
     res.status(400).json({ message: 'missing required name field' });

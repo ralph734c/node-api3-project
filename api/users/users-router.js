@@ -81,14 +81,34 @@ router.put('/:id', validateUserId, validateUser, async (req, res) => {
   }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateUserId, async (req, res) => {
   // RETURN THE FRESHLY DELETED USER OBJECT
   // this needs a middleware to verify user id
+  const userIdToDelete = req.params.id;
+  try {
+    const user = await usersModel.remove(userIdToDelete);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
 });
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts', validateUserId, async (req, res) => {
   // RETURN THE ARRAY OF USER POSTS
   // this needs a middleware to verify user id
+  const userPostsById = req.params.id;
+  try {
+    const thisUsersPosts = await usersModel.getUserPosts(userPostsById);
+    res.status(200).json(thisUsersPosts);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
 });
 
 router.post('/:id/posts', (req, res) => {
