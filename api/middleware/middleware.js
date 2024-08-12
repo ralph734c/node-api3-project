@@ -1,11 +1,4 @@
-const {
-  get,
-  getById,
-  getUserPosts,
-  insert,
-  update,
-  remove,
-} = require('../users/users-model');
+const { getById } = require('../users/users-model');
 
 function logger(req, res, next) {
   // DO YOUR MAGIC
@@ -38,7 +31,7 @@ function validateUser(req, res, next) {
   // DO YOUR MAGIC
   const { name } = req.body;
   if (name) {
-    req.name = name.trim()
+    req.name = name.trim();
     next();
   } else {
     res.status(400).json({ message: 'missing required name field' });
@@ -49,7 +42,7 @@ function validatePost(req, res, next) {
   // DO YOUR MAGIC
   const { text } = req.body;
   if (text) {
-    req.text = text.trim()
+    req.text = text.trim();
     next();
   } else {
     res.status(400).json({ message: 'missing required text field' });

@@ -113,8 +113,7 @@ router.post(
   }
 );
 
-router.use((error, req, res, next) => {
-  // eslint-disable-line
+router.use((error, req, res, next) => { // eslint-disable-line
   res.status(error.status || 500).json({
     customMessage: 'Something bad happened in the posts router',
     message: error.message,
